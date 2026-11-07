@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kickoff League — Futsal & Minisoccer</title>
+<style>
+:root{
+  --bg:#0b0e13;--panel:#131923;--panel2:#192230;--line:#273243;
+  --text:#f2f5f8;--muted:#94a3b8;--green:#b7f34a;--green2:#8bc52f;
+  --red:#ff6b6b;--blue:#72b7ff;--radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top right,#182333 0%,var(--bg) 45%);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.wrap{max-width:1200px;margin:auto;padding:24px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:46px;height:46px;border-radius:13px;background:var(--green);display:grid;place-items:center;color:#111;font-size:24px;font-weight:900}
+h1{font-size:24px;margin:0;letter-spacing:-.7px} .sub{color:var(--muted);font-size:13px}
+.pill{border:1px solid #3a4b32;background:#1b2a16;color:var(--green);padding:7px 12px;border-radius:99px;font-size:12px;font-weight:700}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tab{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:10px 15px;border-radius:10px}
+.tab.active{background:var(--green);color:#111;border-color:var(--green);font-weight:800}
+.layout{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+.panel{background:linear-gradient(145deg,var(--panel),#10151d);border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0}
+.panel h2{font-size:17px;margin:0 0 15px}
+.panel h3{font-size:14px;margin:0 0 10px}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--panel2);padding:14px;border-radius:12px;border:1px solid var(--line)}
+.stat small{color:var(--muted);display:block}.stat strong{font-size:24px;display:block;margin-top:3px}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}
+input,select{width:100%;background:#0c1118;color:var(--text);border:1px solid var(--line);padding:11px 12px;border-radius:9px;outline:none}
+input:focus,select:focus{border-color:var(--green)}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.field{margin-bottom:12px}
+.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:800;background:var(--green);color:#111}
+.btn:hover{background:#c8ff63}.btn.secondary{background:#263244;color:var(--text);border:1px solid #35445a}.btn.danger{background:#3a2025;color:#ff9da5}
+.btn.small{padding:6px 9px;font-size:12px}
+.full{width:100%}
+.player-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
+.player{display:flex;align-items:center;gap:10px;background:#0e141c;border:1px solid var(--line);padding:9px 10px;border-radius:10px}
+.player input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
+.player-name{flex:1;font-weight:650}.player-meta{color:var(--muted);font-size:12px}
+.teamgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.team{border:1px solid #35445a;background:#0e141c;border-radius:12px;padding:14px}
+.team h3{display:flex;justify-content:space-between;color:var(--green);margin-bottom:9px}
+.team ol{margin:0;padding-left:22px}.team li{padding:3px 0}
+.reserve{border:1px dashed #59677a;border-radius:10px;padding:12px;margin-top:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:10px 7px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase}
+td:first-child{font-weight:700}
+.rank{color:var(--green);font-weight:900}
+.empty{color:var(--muted);padding:18px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+.hidden{display:none!important}
+.history-item{padding:12px 0;border-bottom:1px solid var(--line)}
+.history-item:last-child{border-bottom:0}
+.history-item strong{display:block}.history-item small{color:var(--muted)}
+footer{color:var(--muted);font-size:12px;text-align:center;margin:24px 0 8px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.wrap{padding:14px}.teamgrid{grid-template-columns:1fr}}
+@media(max-width:480px){.statgrid{grid-template-columns:1fr 1fr}.row{flex-direction:column}.tabs .tab{flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">⚽</div><div><h1>KICKOFF <span style="color:var(--green)">LEAGUE</span></h1><div class="sub">Your weekly football community</div></div></div>
+  <div class="pill">● COMMUNITY MATCHDAY</div>
+</header>
+
+<nav class="tabs">
+<button class="tab active" data-page="dashboard">Dashboard</button>
+<button class="tab" data-page="teams">Random Teams</button>
+<button class="tab" data-page="results">Input Hasil</button>
+<button class="tab" data-page="players">Pemain</button>
+</nav>
+
+<section id="dashboard" class="page">
+<div class="statgrid">
+  <div class="stat"><small>Total Pemain</small><strong id="totalPlayers">0</strong></div>
+  <div class="stat"><small>Total Match</small><strong id="totalMatches">0</strong></div>
+  <div class="stat"><small>Top Scorer</small><strong id="topScorer" style="font-size:18px">—</strong></div>
+</div>
+<div class="layout">
+  <div class="panel"><h2>🏆 Klasemen Pemain</h2><div id="ranking"></div><div class="note">Poin = 3 × menang. Statistik individu juga menampilkan gol dan assist.</div></div>
+  <div class="panel"><h2>📅 Match Terakhir</h2><div id="recentMatches"></div></div>
+</div>
+</section>
+
+<section id="teams" class="page hidden">
+<div class="layout">
+  <div class="panel">
+    <h2>🎲 Random Team Generator</h2>
+    <div class="row">
+      <div class="field"><label>Jenis olahraga</label><select id="sport"><option value="futsal">Futsal — 5 pemain/tim</option><option value="minisoccer">Minisoccer — 7 pemain/tim</option></select></div>
+      <div class="field"><label>Nama match (opsional)</label><input id="matchName" placeholder="Contoh: Friday Night"></div>
+    </div>
+    <div class="note" id="teamSizeNote">Futsal: otomatis 5 pemain per tim.</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0"><h3 style="margin:0">Pilih pemain hadir</h3><button class="btn secondary small" id="toggleAll">Pilih semua</button></div>
+    <div id="attendance" class="player-list"></div>
+    <div class="note" id="attendanceCount"></div>
+    <button class="btn full" style="margin-top:14px" id="generate">⚡ Acak Tim</button>
+    <button class="btn secondary full" style="margin-top:8px" id="clearTeams">Reset hasil random</button>
+  </div>
+  <div class="panel"><h2>Hasil Random</h2><div id="teamsOutput" class="empty">Pilih pemain yang hadir, lalu klik “Acak Tim”.</div></div>
+</div>
+</section>
+
+<section id="results" class="page hidden">
+<div class="layout">
+<div class="panel">
+<h2>📝 Input Hasil Match (Admin)</h2>
+<div class="field"><label>Jenis olahraga</label><select id="resultSport"><option>Futsal</option><option>Minisoccer</option></select></div>
+<div class="field"><label>Nama / tanggal match</label><input id="resultName" placeholder="Contoh: Match #12 — 7 Nov"></div>
+<div class="row"><div class="field"><label>Tim A</label><input id="teamA" placeholder="Team A"></div><div class="field"><label>Skor A</label><input id="scoreA" type="number" min="0" value="0"></div></div>
+<div class="row"><div class="field"><label>Tim B</label><input id="teamB" placeholder="Team B"></div><div class="field"><label>Skor B</label><input id="scoreB" type="number" min="0" value="0"></div></div>
+<div class="field"><label>Daftar pemain hadir</label><select id="matchPlayers" multiple size="6" style="height:auto"></select><div class="note">Pilih pemain yang ikut. Ctrl (Windows) / Cmd (Mac) untuk memilih lebih dari satu.</div></div>
+<div class="field"><label>Gol (format: Nama:jumlah, pisahkan dengan koma)</label><input id="goals" placeholder="Zaid:2, Budi:1"></div>
+<div class="field"><label>Assist (format: Nama:jumlah, pisahkan dengan koma)</label><input id="assists" placeholder="Zaid:1, Andi:2"></div>
+<button class="btn full" id="saveMatch">Simpan Hasil Match</button>
+<div class="note">Input hasil ini belum memakai login/admin authentication. Jangan publikasikan sebagai sistem admin aman sebelum ditambahkan autentikasi.</div>
+</div>
+<div class="panel"><h2>📚 Riwayat Match</h2><div id="matchHistory"></div></div>
+</div>
+</section>
+
+<section id="players" class="page hidden">
+<div class="layout">
+<div class="panel">
+<h2>👥 Tambah Pemain</h2>
+<div class="row"><div class="field"><label>Nama pemain</label><input id="newPlayer" placeholder="Nama pemain"></div><div style="align-self:end"><button class="btn" id="addPlayer">Tambah</button></div></div>
+<div class="note">Nama pemain harus unik. Data tersimpan di browser ini (localStorage).</div>
+</div>
+<div class="panel"><h2>Daftar Pemain</h2><div id="playerManagement"></div></div>
+</div>
+</section>
+<footer>Kickoff League MVP · Prototype gratis · Data tersimpan di browser/device ini</footer>
+</div>
+
+<script>
+const STORE_KEY='kickoffLeagueMVP_v2';
+let state=JSON.parse(localStorage.getItem(STORE_KEY)||'null')||{players:[],matches:[]};
+let generated=null;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(STORE_KEY,JSON.stringify(state));render();}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function stats(){
+ const map={};state.players.forEach(p=>map[p.id]={...p,goals:0,assists:0,wins:0,losses:0,draws:0,played:0,points:0});
+ state.matches.forEach(m=>{
+  const g=m.scoreA>m.scoreB? 'A':m.scoreB>m.scoreA?'B':'D';
+  m.playerIds.forEach(id=>{if(!map[id])return;let s=map[id];s.played++;
+   if(g==='D')s.draws++; else if((m.teamSide[id]||'A')===g){s.wins++;s.points+=3;}else{s.losses++;}
+  });
+  Object.entries(m.goals||{}).forEach(([id,n])=>{if(map[id])map[id].goals+=n;});
+  Object.entries(m.assists||{}).forEach(([id,n])=>{if(map[id])map[id].assists+=n;});
+ });
+ return Object.values(map).sort((a,b)=>b.points-a.points||b.goals-a.goals||b.assists-a.assists||a.name.localeCompare(b.name));
+}
+function parseStats(raw){
+ const out={};raw.split(',').map(x=>x.trim()).filter(Boolean).forEach(part=>{
+  const idx=part.lastIndexOf(':');if(idx<1)return;
+  const name=part.slice(0,idx).trim(),n=Math.max(0,parseInt(part.slice(idx+1),10)||0);
+  const p=state.players.find(p=>p.name.toLowerCase()===name.toLowerCase());if(p&&n)out[p.id]=(out[p.id]||0)+n;
+ });return out;
+}
+function render(){
+ $('totalPlayers').textContent=state.players.length;$('totalMatches').textContent=state.matches.length;
+ const sorted=stats();$('topScorer').textContent=sorted.slice().sort((a,b)=>b.goals-a.goals)[0]?.name||'—';
+ $('ranking').innerHTML=sorted.length?`<table><thead><tr><th>#</th><th>Pemain</th><th>P</th><th>W</th><th>G</th><th>A</th><th>Pts</th></tr></thead><tbody>${sorted.map((p,i)=>`<tr><td class="rank">${i+1}</td><td>${escapeHTML(p.name)}</td><td>${p.played}</td><td>${p.wins}</td><td>${p.goals}</td><td>${p.assists}</td><td><b>${p.points}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Belum ada pemain. Tambahkan pemain di menu Pemain.</div>';
+ const recent=state.matches.slice().reverse().slice(0,5);
+ $('recentMatches').innerHTML=recent.length?recent.map(m=>`<div class="history-item"><strong>${escapeHTML(m.name||m.sport)} · ${m.scoreA}–${m.scoreB}</strong><small>${escapeHTML(m.sport)} · ${escapeHTML(m.date)}</small></div>`).join(''):'<div class="empty">Belum ada match.</div>';
+ $('attendance').innerHTML=state.players.length?state.players.map(p=>`<label class="player"><input type="checkbox" class="attend" value="${p.id}" checked><span class="player-name">${escapeHTML(p.name)}</span></label>`).join(''):'<div class="empty">Tambahkan pemain terlebih dahulu.</div>';
+ updateAttendanceCount();
+ $('playerManagement').innerHTML=state.players.length?`<div class="player-list">${state.players.map(p=>`<div class="player"><span class="player-name">${escapeHTML(p.name)}</span><button class="btn danger small" onclick="removePlayer('${p.id}')">Hapus</button></div>`).join('')}</div>`:'<div class="empty">Belum ada pemain.</div>';
+ const options=state.players.map(p=>`<option value="${p.id}">${escapeHTML(p.name)}</option>`).join('');$('matchPlayers').innerHTML=options;
+ $('matchHistory').innerHTML=state.matches.length?state.matches.slice().reverse().map((m,i)=>`<div class="history-item"><strong>${escapeHTML(m.name||'Match')} · ${m.scoreA}–${m.scoreB}</strong><small>${escapeHTML(m.sport)} · ${escapeHTML(m.date)}</small><button class="btn danger small" style="margin-top:7px" onclick="deleteMatch('${m.id}')">Hapus match</button></div>`).join(''):'<div class="empty">Belum ada riwayat match.</div>';
+}
+function updateAttendanceCount(){const n=document.querySelectorAll('.attend:checked').length;const size=$('sport').value==='futsal'?5:7;$('attendanceCount').textContent=`${n} pemain terpilih · ${Math.floor(n/size)} tim penuh · ${n%size} pemain cadangan (jika dibagi per tim)`;}
+$('addPlayer').onclick=()=>{const name=$('newPlayer').value.trim();if(!name)return alert('Masukkan nama pemain.');if(state.players.some(p=>p.name.toLowerCase()===name.toLowerCase()))return alert('Nama pemain sudah ada.');state.players.push({id:crypto.randomUUID(),name});$('newPlayer').value='';save();};
+$('newPlayer').addEventListener('keydown',e=>{if(e.key==='Enter') $('addPlayer').click();});
+window.removePlayer=id=>{if(confirm('Hapus pemain ini? Statistik match lama tidak akan dihapus.')){state.players=state.players.filter(p=>p.id!==id);save();}};
+window.deleteMatch=id=>{if(confirm('Hapus match ini?')){state.matches=state.matches.filter(m=>m.id!==id);save();}};
+$('sport').onchange=()=>{const s=$('sport').value,size=s==='futsal'?5:7;$('teamSizeNote').textContent=`${s==='futsal'?'Futsal':'Minisoccer'}: otomatis ${size} pemain per tim.`;updateAttendanceCount();};
+$('attendance').addEventListener('change',updateAttendanceCount);
+$('toggleAll').onclick=()=>{const boxes=[...document.querySelectorAll('.attend')],all=boxes.every(b=>b.checked);boxes.forEach(b=>b.checked=!all);$('toggleAll').textContent=all?'Pilih semua':'Batalkan semua';updateAttendanceCount();};
+$('generate').onclick=()=>{
+ const size=$('sport').value==='futsal'?5:7;
+ let chosen=[...document.querySelectorAll('.attend:checked')].map(b=>state.players.find(p=>p.id===b.value)).filter(Boolean);
+ if(chosen.length<size)return alert(`Minimal ${size} pemain untuk membuat satu tim.`);
+ chosen.sort(()=>Math.random()-.5);
+ const count=Math.floor(chosen.length/size),playing=chosen.slice(0,count*size),reserves=chosen.slice(count*size);
+ const teams=Array.from({length:count},(_,i)=>playing.slice(i*size,(i+1)*size));
+ const label=$('sport').value==='futsal'?'Futsal':'Minisoccer';
+ generated={sport:label,teams,reserves};
+ $('teamsOutput').className='';
+ $('teamsOutput').innerHTML=`<div class="sub">${escapeHTML($('matchName').value||'Matchday')} · ${label} · ${size} pemain/tim</div><div class="teamgrid">${teams.map((t,i)=>`<div class="team"><h3><span>TEAM ${String.fromCharCode(65+i)}</span><span>${t.length}/${size}</span></h3><ol>${t.map(p=>`<li>${escapeHTML(p.name)}</li>`).join('')}</ol></div>`).join('')}</div>${reserves.length?`<div class="reserve"><b>🪑 Cadangan (${reserves.length})</b><br>${reserves.map(p=>escapeHTML(p.name)).join(', ')}</div>`:''}<div class="note">Tim dibuat secara acak. Pemain yang tidak masuk tim penuh menjadi cadangan.</div>`;
+};
+$('clearTeams').onclick=()=>{$('teamsOutput').className='empty';$('teamsOutput').textContent='Pilih pemain yang hadir, lalu klik “Acak Tim”.';generated=null;};
+$('saveMatch').onclick=()=>{
+ const a=Math.max(0,parseInt($('scoreA').value)||0),b=Math.max(0,parseInt($('scoreB').value)||0);
+ const selected=[...$('matchPlayers').selectedOptions].map(o=>o.value);
+ if(!selected.length)return alert('Pilih pemain yang ikut match.');
+ const side={};selected.forEach((id,i)=>side[id]=i%2===0?'A':'B');
+ const match={id:crypto.randomUUID(),sport:$('resultSport').value,name:$('resultName').value.trim(),scoreA:a,scoreB:b,playerIds:selected,teamSide:side,goals:parseStats($('goals').value),assists:parseStats($('assists').value),date:new Date().toLocaleDateString('id-ID')};
+ state.matches.push(match);$('resultName').value='';$('goals').value='';$('assists').value='';save();alert('Hasil match disimpan.');
+};
+document.querySelectorAll('.tab').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==btn.dataset.page));});
+render();
+</script>
+</body>
+</html>
